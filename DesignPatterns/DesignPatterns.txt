@@ -1,0 +1,62 @@
+Builder Design Pattern
+    problems of factory method
+    -pass to many arguments to create object
+    -some parameters may be optional
+    -factory class takes responsibility for creating object. If the object is heavy then all complexity is the part of factory class.
+
+    So in Builder pattern we create object step by step and finally return final object with desired values of attributes.
+    -helps to build immutable object
+    
+
+Prototype Design Pattern
+    -concept is to copy an existing object rather than creating a new instance from scratch, because creating new object may be costly.
+    -complex operations like connecting to database or network connections while creating an object may be costly.
+    -this approach saves costly resources and time, especially when object creation is heavy proces.
+    -we clone/copy the already created object
+    -shallow/deep copy
+    
+Observer Design Pattern
+    -its a behavior design pattern
+    -when the subject changes the state all this dependent objects notified the changes.
+    -one to many relation
+    -example youtube subscribers
+
+Iterator Design pattern
+    -a way to access the elements of an object without exposing its underlying implementation.
+    -userList has user objects to traverse/perform opertion on each object
+
+
+
+
+SOLID principle
+    1.SRP   
+        - single responsibility principle.
+        
+
+    2.Open Close principle.
+        - Open for extension close for modification.
+        - Example Payment class
+    3.Liskov substitution principle.
+        - Base class object can be replaced by derived class object safely.
+        - Liskov Substitution Principle states that derived classes must be 
+            fully substitutable for their base classes without changing the program’s expected behavior.
+        - Example Bird (Base) and Pengiun(derived), fly() method in not valid for Pengiun it changes the behavior.
+    
+    4.Interface segregation principle.
+        -prefer small interface over one large fat interface.
+        - larger interfaces.
+            - makes classes implement unused methods.
+            - increase coupling.
+        - ISP ensures
+            - An interface should represent a single role, not a collection of behaviors.
+            - clear abstraction.
+            - easier maintainence.
+            - Example: Worker(base) has work(),sleep(),eat() but if the derived class(RobotWorker) then sleep(),eat() these are unused methods and its forced to implement.
+            - Think of a TV remote:
+                ❌ One remote controlling TV, AC, lights, fan (fat interface)
+                ✅ Separate remotes or buttons per device
+                Each client uses only what it needs.
+
+    5. Dependency inversion principle.
+
+    

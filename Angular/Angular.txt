@@ -1,0 +1,197 @@
+javascript vs typescript
+- does not check the syntax error for javascript.
+- runtime behavior: typescript never changes the runtime behavior of javascript
+- erased types: ts erases the types to produce the compiled code.
+                when the program is runned it has no type information.
+
+installation
+    -install node.js by downloading from website.
+    -install angular through cmd
+command
+ -ng new <project_name> : to create a project
+ -ng serve : to run
+
+Folder structure
+    -.browserlistrc : it is a config file which contain the target browsers.
+    - npx browserlist to see the target browsers.
+
+    -.editorconfig
+        -To maintain coding style and consistency.
+
+    -angular.json
+        - contain dependency and configuration related to project.
+
+    -package.json 
+        -npm package.
+        -contains the entry of package used.
+        -npm i ngx-spinner --save
+        -devdependencies : needed only during development. 
+                           needed for debugging packages.
+        
+    -package-lock.json
+        - contains dependency details.
+
+    -tsconfig.json
+        -typescript is converted to js
+        -contains configs file related to ts.
+    
+    -test.js
+     -contains unit test file.
+
+    -src/styles.scss
+        -will add global css styles.
+    
+    -polyfills.ts
+        -used for browser compatibility
+decorator
+    - is a ts feature used to pass metadata
+    - contains the metadata of the component
+
+27 April
+- class to add logic and beavior
+- html templates
+- css styles
+
+-{{}} used in html templates for class property, evaluate expression, function call.
+
+- signals
+    -wrapper around a value that notifies the costumers when the value gets changed
+    - writable or read only (computed signal)
+
+    writable
+        - signals are getter function meaning calling them reads their value.
+        - writable signals have the type WritableSignal
+        - create writable signal: const count = signal(0)
+        - signals are getter function : count()
+        - change value of writable signal: count.set(3)
+        - operation to compute a new value from the previous one: count.update(value => value + 1);
+
+    Computed 
+        - const count: WritableSignal<Number> = Signal(0);
+        - const doubleCount: Signal<Number> = computed(() => count() * 2);
+        - are lazy evaluated and memoized meaning values are not computed until its read for first time and computed value is stored in cache.
+        - cannot directly assign values to computed signal.( produces compilation error)
+        -  TODO computed signal dependencies are dynamic.
+        -  TODO - OnPuch
+        - effect function ( slot in QT) - always run atleast once when one or more signal value changes.Always run asynchronously,during the change detection process.
+            - used for logging data when it changes(debugging tool)
+            - not to use - avoid using effects for propagation of state changes.
+            - can only create effect() within an injection context(call effect within a component, directive, or service constructor)
+            - TODO injector
+            - effect is automatically destroyed when its enclosing context is destroyed.
+            - effects return an EffectRef which can be used to destroy manually by calling .destroy() method.
+
+        - by default signals use referential equality
+-components
+    - ng g component <name> : command to create a component using CLI.
+    - selector property of the component configuration gives you a name to use when referencing the component in another template.
+    - use selector as an HTML tag.
+
+
+-Interpolaltion in angular
+    - Display data from ts to html file
+    - execute js code in html file
+    - {{}}
+    - Limitation
+        - cannot assign a value
+        - cannot create a variable
+        - cannot do incremental operation
+        - cannot use loops
+-commands
+    -ng build
+    -ng serve
+    -ng -g pipe <pipe_name>
+    -ng -g component <component_name>
+
+pipe
+    -pipes are useful when it comes to managing data within Interpolaltion
+    - built in angaular pipes: 
+        -currency pipe
+        -date pipe
+        -decimal pipe
+        -json pipe
+        -lower case pipe
+        -upper case pipe
+
+To do
+    - understand type inference and contextual typing in ts.
+
+7 May 2025
+- Events: click, input field, mouse,focus, and blur.
+
+8 May
+- get and set input field value
+    -ways to set and get value
+    -make input field pass and function
+    -get value with Event
+    -get value with template reference variable
+
+13 May
+- set and options
+- global style
+- internal/inline style
+- style in component.ts file
+- load multiple css files in component
+
+For loop contextual variables $count,$index,$last,$first,$odd and $even
+
+Dynamic styling
+
+Directives
+    -is class that adds additional behavior to elements in your application.
+    -help you provide more power to DOM elements.
+    -ifelse condition
+    -for loop
+    -add style
+    -ngIf,ngFor,ngStyle,ngSwitch,ngClass
+    3 types
+        -Component Directives
+            - most common type of directive.
+            - used in component template file
+        - Structural Directives
+            -Change the structure of DOM by adding, removing,or manipulating elements.
+        - Attribute Directives
+            -Modify the appearance or behavior of an existing element.
+
+    -ngFor
+        -to loop over the elements in HTML(templates)
+    
+    custom Directives
+        -ng generate directive directiveName
+        -ng g d directiveName
+        -ElementRef to take the reference of the tag as a input to apply the directive properties.
+
+    @Input() pass data parent to child
+    @Output pass data child to parent
+
+    -Routing
+        - navigate one page to another.
+
+        -Pass data with Router link
+        -Pass data with button click.
+        -Pass data with Router
+        
+    -view encapsulation
+        3 types
+        - ViewEncapsulation.None - there is no unique attribute, all the other components will inherit properties from parent.
+        -ViewEncapsulation.Emulated -adding unique attribute on each component, by default emulated will be used.
+        -ViewEncapsulation.ShadowDOM
+            -style.css file get applied globally
+            -creates its own DOM
+            -browser keeps the ShadowDOM and mainDOM separately, and rendering also happens separately.
+            - thats why feature state and style of the shadowDOM stay private and does not get affected by mainDOM
+
+HTTP client angular
+    -Every front end applicationneeds to commmunicate with the cakend microservices to share the data over the HTTP protocol. In angular, this communication is done via the HTTP client.
+    -Httpclient service is available iin the @angular/common/http package in the angaular framework.
+    -for the Httpclient service to work,needs to import HttpclientModule in the application using the app module.
+    -Different types of Httpclient methods provided 
+    get(),post() - to post new client data to server,put() - to update data to server for the given resource or create one if it does nto exist.
+    delete() - to delete item form the server for the given resource.
+    patch() - to update part of the information for the given resource.
+
+    -we will use a json server to understand http client and to install json server on our project we use.
+    -npm install -g json-server and after this create a db.json file with some data.
+    -start the server - json-server --watch db.json
+
+ng generate module third --route third --module app.module

@@ -1,0 +1,47 @@
+<div class = "container-fluid mb-5">
+  <h1>Bootcamp enrolment form</h1>
+  <form #userForm="ngForm">
+    {{userForm.value | json}}
+    <div class="forms-group">
+      <label>Name</label>
+      <input type="text" class="form-control" name="userName" ngModel>
+    </div>
+
+    <div class="forms-group">
+      <label>Email</label>
+      <input type="email" ngModel class="form-control">
+    </div>
+
+    <div class="forms-group">
+      <label>Phone</label>
+      <input type="tel" ngModel class="form-control">
+    </div>
+
+    <div class="form-group">
+      <select class="custom-select">
+        <option selected>I am interested in</option>
+        <option *ngFor="let topic of topics">{{topic}}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Time preference</label>
+      <div class="form-check">
+        <input class="form-check-input" ngModel type="radio" name="timePreference" id="morning" value="morning">
+        <label class="form-check-label">Morning (9AM - 12PM)</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" ngModel type="radio" name="timePreference" value="evening">
+        <label class="form-check-label">Evening (6PM - 9PM)</label>
+      </div>
+    </div>  
+    <div class="form-check mb-3">
+        <input class="form-check-input" ngModel type="checkbox">
+        <label class="form-check-label">Send me promotional offers</label>
+    </div>
+
+    <button class="btn btn-primary" ngModel type="submit">Submit form</button>
+
+  </form>
+</div>

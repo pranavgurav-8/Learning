@@ -1,0 +1,21 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+int gcd(int a,int b){
+    while(a>0 && b>0){
+        if(a>b){
+            a=a%b;
+        }
+        else{
+            b=b%a;
+            std::cout<<b<<std::endl;
+        }
+    }
+    if(a==0) return b;
+    return a;
+}
+int main() {
+    // Write C++ code here
+    std::cout << gcd(0,28)<<std::endl;
+
+    return 0;
+}

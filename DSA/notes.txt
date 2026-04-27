@@ -1,0 +1,112 @@
+    2 pointer approach
+    - array, linked list
+    - sorted, merge, remove duplicates,rearrange, detect cycle, find pair/triplets.
+
+
+sliding window
+    - works on 2 ptr concepts.
+    - does not work on negative numbers.
+    - applies in arrays or strings (subarray/substring)
+    - continous or sub sequence.
+    - are we finding- max,min,longest,shortest,sum,count,average,at most K/ at least K/ exactly K.
+    - can be fixed or dynamic.
+
+    steps
+        - indetify the pattern
+        - fixed/ variable
+        - data / info
+        - new window 
+
+Linked list
+	- slow/fast pointer approach
+		-string,array,LL,number
+		- to find cycle,loop,starting point of cycle,middle of linked list or repetative, happy number
+
+Kadanes algorithm
+	- used when for contiguous subarrays (maximum/minimum)sum,product,frequency.
+	- array contains negative, positive, zero numbers.
+	-maximum sum subarray
+
+
+Prefix sum
+    - on arrays,sum of left right.
+    - sum of subarrays -> Negative nums-> sum(i.....j) == K or sum(i...j)%k ==0 then use HASH MAPs
+                            |-> shortest window with sum > K then use deque
+                            |-> Range sum -> Merge sort on Prefix array ( hard )
+    - specially works for negative numbers
+
+    Template
+        -prefix ds -> loop over array -> update prefix -> check condition.
+
+    - no. of sum, len of longest sub arr, len of any sub array with some condition ( sum )
+
+
+Merge Interval
+	- keywords :- Interval, range, overlap, conflict, merge, free time, simultaneous usage, room, load, CPU, meeting.
+    - sort it from the start.
+    - 
+
+Hash Map
+	- find(), size(), erase(key)
+	- string frequency, 
+
+Stack
+    -LIFO
+    - push(),pop(),top(),size(),empty()
+    - arrays,strings.
+    - left to right.
+    -  most recent element, greatest, smallest.
+    - matching, cancelling, cleaning.
+    - 3 types of stack - simple, monotonic (increasing or decreasing), greedy stack ( condition check)
+
+
+
+
+Heap
+    - get the topmost element
+    - insert any thing (Ologn)
+    - delete at topmost
+
+    - min heap - smallest at top
+        priority_queue<int, vector<int>, greater<int>> pq;
+
+    - max heap - biggest value at top.
+        priority_queue<int> pq;
+
+    - insert - pq.push()
+    - delete - pq.pop()
+    - watch - pq.top()
+    - pq.empty()
+    - pq.size()
+
+
+Binary search
+     - Guess/ Tukka
+     - to find out no. of cows, speed, no. of days, fan regulator.
+     - yes/no, true/false,good/bad - monotonic data.
+     - to get the turning point.
+     - optimization problems.(mininum/maximum - return single value)
+     
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

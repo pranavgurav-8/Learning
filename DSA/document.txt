@@ -1,0 +1,40 @@
+We already have test_ioConfig_cdm_service script which performs 
+1.Loads the OpenAPI spec from com.hp.cdm.service.ioConfig.version.2.openapi.json and auto-generates up to 50 test cases (max_examples=50) for all GET endpoints under /cdm/ioConfig/v2/.
+2.Authenticates each request using an OAuth2 bearer token obtained from the token fixture.
+3.Calls and validates each generated request against the target device/simulator using case.call_and_validate(), which checks:
+    -Response status codes match the spec
+    -Response schemas match the spec
+    -Content-type headers are correct
+    -All checks from schemathesis.checks.ALL_CHECKS
+4.Runs pre-call hooks via the setup_callbacks fixture, which invokes idle_state (currently a no-op) before each API call.
+5.Uses deterministic generation — @seed(1) and derandomize=True ensure reproducible test cases across runs.
+
+26 tests which covers these CDM urls
+
+#	URL
+1	/cdm/ioConfig/v2/adapterConfigs
+2	/cdm/ioConfig/v2/adapterConfigs/eth0
+3	/cdm/ioConfig/v2/adapterConfigs/eth0/constraints
+4	/cdm/ioConfig/v2/adapterConfigs/wifi0
+5	/cdm/ioConfig/v2/adapterConfigs/wifi0/constraints
+6	/cdm/ioConfig/v2/adapterConfigs/wifi1
+7	/cdm/ioConfig/v2/adapterConfigs/usb
+8	/cdm/ioConfig/v2/wirelessConfig
+9	/cdm/ioConfig/v2/wirelessConfig/constraints
+10	/cdm/ioConfig/v2/wifiScan
+11	/cdm/ioConfig/v2/wifiScan/wifiNetworks
+12	/cdm/ioConfig/v2/adapterStats
+13	/cdm/ioConfig/v2/adapterConfigs/eth0/suggestIpAddr
+14	/cdm/ioConfig/v2/adapterConfigs/wifi0/suggestIpAddr
+15	/cdm/ioConfig/v2/wifiDirectConfig
+16	/cdm/ioConfig/v2/wifiDirectConfig/constraints
+17	/cdm/ioConfig/v2/wifiDirectClients
+18	/cdm/ioConfig/v2/alerts
+19	/cdm/ioConfig/v2/alerts/{id}
+20	/cdm/ioConfig/v2/wifiProtectedSetup
+21	/cdm/ioConfig/v2/capabilities
+22	/cdm/ioConfig/v2/networkReset
+23	/cdm/ioConfig/v2/serviceConfig
+24	/cdm/ioConfig/v2/systemConfig
+25	/cdm/ioConfig/v2/systemConfig/constraints
+26	/cdm/ioConfig/v2/wifiDiagnostics

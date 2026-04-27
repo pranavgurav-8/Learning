@@ -1,0 +1,17 @@
+ Online C++ compiler to run C++ program online
+#include iostream
+std::string isPrime(int n){
+    for(int i = 2; ii = n; i++){
+        if(n % i == 0){
+            return Non Prime;
+        }
+    }
+    return Prime;
+}
+int main() {
+     Write C++ code here
+    int n = 2;
+    stdcout  isPrime(n) stdendl;
+
+    return 0;
+}

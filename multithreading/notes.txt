@@ -1,0 +1,152 @@
+Basics
+
+ Why we need multithreading
+    - CPU sits idle during I/O operations.
+
+Concurrency - means multiple tasks make progress in overlapping timeperiods.
+            - CPU switches rapidly between tasks.
+            - single core
+
+Parallelism - multiple tasks execute at the same time
+            - multi core but execution is controlled by the OS scheduler
+
+
+std::thread - gives you concurrency.
+    - whether it runs in parallel depends on:
+        - CPU core, OS scheduler. Workload.
+    - it does not guarantee parallel execution.
+    - Multithreading enables concurrency, and parallelism may happen if hardware allows.
+
+Process
+    - it is a running instance of a program.
+    - Owns
+        1. virtual address space.
+        2. code (text section)
+        3. Heap 
+        4. Open files
+        5. OS resources.
+        6. atleast onethread.
+    - Context switch is expensive it has switches page tables,virtual memory, TLB flush, CPU regiters.
+
+Thread 
+    - is a smallest unit of execution inside a Process.
+    - a thread has program counter, register, stack.
+    - a thread shares code, heap, global variable, open files.
+    - threads are light weight because they share resources
+    - each thread has its own stack.
+    - Heap and global are shared -> race condition.
+    - context switches are cheaper because address space remains the same. It switches only registers, stack pointer,program counter.
+    
+
+
+ Process                     vs                     Thread
+a.independent memory                            shared memory
+b.heavy context switch                          light weight
+c.IPC needed                                    direct variable sharing
+d. one process crashes others survive           one thread crashes then entire process crashes.
+
+thread - is a smallest unit of execution inside a Process.
+    - std::thread is a object of C++ .
+    - thread cannot be copied but it can be moved.
+
+
+OS scheduler
+    - the scheduler decides which thread runs on which core and for how long.
+
+Context switching
+    -When switching threads, OS saves:
+        1.Program counter
+        2.Registers
+        3.Stack pointer
+        4.CPU flags
+
+
+  join                    vs          Detach
+a. caller waits                      thread runs independently
+b. Safe                              Dangerous if accessing local variables.
+
+- Detached thread can cause undefined behavior if they access destroyed resources.
+
+
+Race condition
+    - outcome depends on timing/order of execution.
+    - multiple threads try to increment a variable.
+    - modern OSes uses preemption meaning OS can pause a thread at any instruction and resume it later.
+            load x
+            increment
+            store x
+    - Thread can be preempted between these steps → race condition.
+
+
+Mutex (mutual exclusion)
+    - provides mutual exclusion.
+    - ensures only one thread enters critical section.
+    - std::mutex m
+    
+    - std::lock_gurad is RAII based, it prevents forgetting unlock.
+    - preferred to use std::lock_guard<std::mutex> lock(m);
+
+    - std::unique_lock<std::mutex> lock(m)
+    - unique_lock supports manual unlocking, condition varaiable.
+
+
+
+DeadLock
+    - thread A waits for thread B.
+    - thread B waits for thread A.
+    - DeadLock occurs when set of threads are permanently blocked, each waiting for resource held by another.
+
+    4 Coffman condition - deadlock occurs if all 4 hold 
+    1. mutual exclusion - resource cannot be shared.
+    2. hold and wait - thread holds one resource and waits for another.
+    3. No premption - resources cant be forcibly taken.
+    4. circular wait - circular dependency exists.
+
+    
+Condition variable (producer consumer)
+    - mutex protects data, a condition variable coordinates waiting.
+    - condition_variable allows thread to wait until a condition is true.
+    - releasing the mutex while waiting and acquiring it when notified.
+    
+    - std::condition_variable internals.
+    - spurious wakeups - A thread can wake up without any notification.
+
+    - producer consumer (bounded and unbounded)
+
+Atomic operations std::atomic
+    - std::atomic<int> counter = 0;
+    - need ? because mutex are heavy, kernel involvement.
+    - gives lock free operations, no blocking, precice control over visibility and ordering.
+    - guarantees correctness but not performance.
+    - it does not prevent false sharing.
+    - False sharing happens when threads modify different variables located on the same cache line.
+    - Avoid false sharing by doing Padding
+
+
+Intermediate
+1.Memory ordering
+    - compiler and CPU reorder instruction for performance.
+    - rule of thumb
+        - use default(seq_cst) unless expert.
+
+2. Thread Pool
+    why thread pools
+        - creating threads is expensive.
+        - reuse threads.
+
+    components
+        - worker threads
+        - task queue
+        - condition variable.
+
+3. False sharing (performance killer)
+    - 2 threads modify different variables on same cache line.
+
+4. Lock-Free vs Wait Free
+    - lock-free  ->     system makes progress.
+    - wait-free  ->     every thread makes progress.
+
+
+Tools to debug
+    - ThreadSanitizer
+    - Helgrind.

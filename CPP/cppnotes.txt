@@ -1,0 +1,336 @@
+Smart Pointers
+    - Why?
+        - raw pointers are dangerous.
+        - memory leak, double delete, dangling pointer, ownership is unclear
+    - built on RAII ( resource acquistion Is Initialization)
+        - A resource is acquired in a constructor and released in a destructor.
+    
+    - A smart pointer is an object that owns or observes a dynamically allocated object and automatically deletes it when appropiate.
+
+    - Types of Smart Pointers.
+        - unique_ptr   - exclusive ownership
+            - cannot be copied 
+            - can be moved.
+            - std::unique_ptr<int> p1 = make_unique<int>(10);
+            - unique_ptr is a small RAII wrapper around a raw pointer that enforces exclusive ownership.
+                It deletes the owned object in its destructor, disables copying, and allows ownership transfer via move semantic.
+            - in the STL implementation the deleter is a template parameter and is stored inside the unique_ptr. 
+                    Empty deleters are optimized away using Empty Base Optimization
+            -make_unique is preferred because it provides strong exception safety, prevents raw pointer misuse, 
+             and makes ownership explicit, whereas using unique_ptr(new T) risks leaks in complex expressions."
+
+        - shared_ptr - shared ownership 
+            - multiple owners.
+            - uses reference counting
+            - object is deleted when count<0.
+            - std::shared_ptr p = make_shared<int>(10);
+
+            - shared_ptr
+                ├── T*  -------------------->  object (T)
+                └── control_block*  -------->  control block
+            - it maintains a pointer to a managed object.
+            - and also a pointer to a control block.
+            - control block contains
+                - strong reference count. - it controls the object lifetime
+                - weak refernce count. - it controls the control blocks lifetime.
+                    -The control block must stay alive after the object is destroyed so that weak_ptr 
+                        can safely detect that the object is gone and avoid dangling pointers.
+                - Deleter
+                - Allocator info
+            - std::shared_ptr<Foo> p(new Foo); it causes two separate heap allocations(performance costly) -> 1. allocate object 
+                                                                                                              2. the control block
+                - heap allocation is slow, object and control block are not adjacent, more poiner chasing( dereference obj pointerm derefernce control block pointer)
+                - Optimization make_shared<int>
+                    - auto p = std::make_shared<Foo>();
+                    - one heap allocation instead of two.
+                    - better cache locality.
+                    - less fragmentation.
+                    - make_shared merges object + control block
+
+                - Why Can’t shared_ptr(new T) Do This
+                    - the object is created before shared_ptr is constructed.
+                    - shared_ptr cannot legally "move" the object into the control block.
+
+            - w.lock() is the safe way to temporarily obtain ownership of an object from a std::weak_ptr.
+                - lock tries to "promote" a weak_ptr into a shared_ptr.
+                - if the object is still alive -> returns a valid shared_ptr.
+                - if the object is destroyed -> returns an empty shared_ptr.
+                
+
+                
+
+        - weak_ptr - non_owning. use-> break cycles.
+            - weak_ptr exists to observe an object managed by shared_ptr without owning it.
+             - it solves breaking reference cycles and avoiding dangling pointers.
+            struct A{
+                std::shared_ptr<B> b; 
+            }
+            struct B{
+                std::shared_ptr<A> a; 
+            }
+
+            - memory leak -> reference count never becomes zero.
+
+            struct B {
+                std::weak_ptr<A> a;
+            };
+            - does not use reference count.
+            - must be converted to shared_ptr to use.
+
+            uses cases  
+                - parent child relationships
+                - obserevers.
+                - caches.
+                - graphs
+
+
+    Cheat sheet.
+        Default        -> unique_ptr
+        Need sharing   -> shared_ptr
+        Avoid cycles   -> weak_ptr
+        Pass params   -> raw ptr / ref
+        Factories     -> return unique_ptr
+
+OOPs
+    - pure virtual function
+        - makes Abstract class 
+        - forces the derived class to define the function.
+        - cannot create a objects with Abstract class.
+    
+STL (Standard Template Library)
+    - is a collection of classes and functions that provide readymade data structures and algorithms.
+    - provides efficient, typesafe, well tasted, reusable, standardized.
+    - 4 main pillar 
+        1. Containers
+        2. Iterators
+        3. algorithms
+        4. Functors.
+
+    Classification of Containers
+        1. Sequence Containers - elements are stored linearly.
+                      - when to use                        
+            a. vector - dynamic array, fast access.
+                - contigous memory
+                - random access
+                - used for faster reads.
+                - dynamic resizing.
+                -  O(1) - access, O(n) insert and delete.
+
+            b deque - fast insert at front and back.
+                - double ended queue.
+                - segmented contigous memory.(segmented array)
+                - not fully contigous like vector 
+                - random access - O(1)
+                - inset middle - O(n)
+                - why is exist? vector is bad at front insertion and list is bad at cache performance,
+                - push_back(), push_front()
+
+            c list - doubly linked list
+                - non-contigous memory.
+                - insert/delete O(1), access/search O(n)
+                - use list when frequent insertion or deletion in the middle are required.
+                - front(), back(),push_front(val),push_back(val),pop_front(),pop_back(),insert(iterator pos,val),erase(iterator pos),erase(iterator first,iterator last),remove(val)
+                  reverse(),merge(list2),unique(),remove_if(predicate)
+                - Supports splice, merge, remove_if, unique — these are not in vector/deque
+
+            d. forward_list - singly linked list
+
+            e. array - fixed size array.
+
+        2. Associative containers (Ordered) - elements stored in order.
+                  - Property
+            a. set - unique keys
+                - implement using self balancing BST.
+                - stored unique elements in sorted order.
+                - O(logn) insertion and deletion,search
+                - random access is not supported.
+                -insert(key),erase(key),find(key), count(key)
+            b. multiset - duplicate keys are allowed
+            c. map - key-value pair 
+                - sorted keys.
+                - O(log n) operations (insert/find/delete)
+                - unique keys
+                - internal implementation - self balancing BST.
+                - when to use? sorted data needed,
+                - insert(pair),insert({key,value}),erase(key),clear(),count(key),find(key)
+            d. multimap - duplicate keys
+
+        3. Unordered containers - No order faster lookup
+            a. unordered_set -  unique
+                - it implement using Hash table.
+                - search O(1)
+            b. unordered_map - key-value
+                - O(1) average (insert/find)
+                - no order
+                - worst case O(n)
+                - uses hashing
+            c. unordered_multimap
+            d. unordered_multiset    
+        
+        4. Contianer Adaptors - Restricted interface
+            a. stack - deque/vector
+            b. queue - deque
+            c. priority_queue - heap
+
+    
+    Iterators 
+        - it is a object that points to the element in the container and allows to traverse, access and modify the elements.
+        - provides a common interface for all STL containers.
+        - act like pointers to containers
+        - types - input, output, random, bidirectional, forward.
+
+    algorithms
+         -STL algorithms works on iterators and not on containers.
+         - find(),count(), reverse(), min_element(),max_element(),sort(), binary_search().
+
+    Functors
+        - it a class with operator() 
+    
+    Adaptors
+        - an existing container to a new interface
+        - stack
+
+    Allocators
+        - STL containers use allocators for memory management.
+
+
+
+    Difference between Map and unordered_map
+        - map stores elements in sorted order using a balanced tree, while unordered_map stores elements using a hash table with no ordering.
+    
+
+    vector and deque
+        - vector uses a single contiguous memory block, while deque uses multiple contiguous blocks (segmented array) to allow efficient insertion at both ends.
+
+
+
+    priority_queue
+        - is a container adapater that always allows access to the highest priority element in O(1) time, while insertion and deletion takes O(logn).
+        - by Default uses Max heap.
+        - largest element has priority.
+        - underlying container vector
+        - data structure is Binary heap.
+        - random access not allowed.
+        - “Priority queue is implemented using a binary heap stored in a vector.
+            Insertion performs heapify-up, deletion performs heapify-down, both taking O(log n),
+             while accessing the top element is O(1).”
+
+
+Library Linking
+    - library is a collection of precompiled object files.
+     2 types 
+        1. static library  (.a extension)
+        2. dynamic (shared) library. (.so linux, dll windows, dylib macOS)
+
+    static Linking
+        - library code is copied into executable, large size, no dependency needed at runtime.
+        - libmath.a
+        - g++ main.o -lmath
+        - linker copies only used functions.
+        - faster start up, no dependency, safer deployment.
+        - recompile needed if libray changes.
+        - g++ -c src/math.cpp -Iinclude
+          ar rcs lib/libmath.a math.o
+          g++ main.cpp -Iinclude -Llib -lmath -o app
+
+    Embedded systems have no support for OS they run on RTOS, which does not have dynamic loader and no file system (very limited one)
+    symbol resolution happen at the runtime for dynamic libray and they virtual file system, OS with loader, 
+
+    dynamic Linking
+        - loaded at runtime.
+        - executable reference the library.
+        - libmath.so
+        - g++ main.o -lmath
+        - smaller executable
+        - library can be updated independently.
+        - shared across multiple programs.
+        - cons - runtime dependency issues.
+        - shared libraries are compiled with fPIC (position independent code.)
+        - g++ -fPIC -shared math.cpp -o libmath.so
+            g++ main.cpp -L. -lmath -Wl,-rpath,'$ORIGIN' -o app
+
+    Implicit Linking
+        - Linker and loader automatically loads and bind the shared libraries without the program explicitly requesting it.
+        - dynamic loader loads all needed libraries.
+        - resolves symbols.
+        - main() start only after resolution.
+        - program never calls the loader explicitly.
+
+    Explicit Linking.
+        - program manually loads the shared libraries and resolves symbols at runtime using APIs like dlopen and dlsym.
+        - g++ main.cpp -ldl
+        - libraries loaded on demand.
+        - symnbols resolved manually.
+        - errors handled by program.
+        - program controls everything. 
+        - symbols resolved through PLT/GOT
+
+    GOT Global Offset table
+        - why we need it?
+            - using dynamic linking function address are unknown at compile time, shared libraries may be loaded at different virtual addresses.
+        - GOT is a table that stores absolute addresses of global variables and functions from the shared libraries.
+        - created by the linker.
+        - filled by the dynamic loader at runtime.
+        - located in programs data segment.
+        - Symbol name → Actual runtime address
+
+    PLT Procedure linkage table
+        - it is a set of small code stubs used to call function in shared library.
+        - it lives in the code(text) section.
+        - one PLT entry per external function.
+        - acts as a middle man b/w code and shared library 
+        - fucntion call -> PLT -> GOT -> shared library function.
+        - -fno-plt exists to avoid PLT stubs for function calls. to make direct function calls through GOT. It disables lazy binding in dynamic linking. 
+            - It require symbol resolved at load time in dynamic linking.
+        - PLT allows faster start up, resolve symbol only when first used.
+        - lazy binding - resolves symbols on first call.
+        - early binding - resolves all symbols at startup.
+
+
+        In dynamic linking, function addresses are not known at compile time.
+        The PLT provides stubs for external function calls, and the GOT stores their actual runtime addresses.
+        On the first call, the PLT invokes the dynamic linker to resolve the symbol and update the GOT.
+        Subsequent calls jump directly via the GOT, making them fast.
+
+    PIC Position independent code
+        - GOT/PLT exist to support PIC.
+        - shared libraries are compiled with -fPIC.
+        - can run at any virtual address.
+        - uses relative addressing + GOT.
+
+    PIE positin independent executable
+        - PIE code is slightly less strict because executables don’t need to be shared like libraries.
+        - Used by one process.
+
+    Commands
+        - -Wl,-z,now - forces compiler to resolve all symbols at program startup. 
+        - -z,now - All GOT entries resolved at load time, No runtime symbol resolution.
+        - -z,relro - marks GOT as read only
+                    - read only after relocations. It prevents GOT overwrite attacks.
+
+
+Function Pointers
+    - used to store the address of a function.
+    - <return_type> (*fptr)(<parameter_type>);
+    - calling the function ftr(parameters);
+    - allows functions to pass as arguments or select behavior at runtime.
+    - plymorphism without C++, refer code function_pointers
+    - use
+        - callback meachanisms, runtime decision making, replace large if-else/switch,C APIs, OS kernel, signal handlers.
+    
+
+Lambda Function 
+    - is anonymous function object (functor) created at compile time.
+    - lambdas are compiler generated objects of anonymous class.
+    -  [<capture>](parameter){ body }
+    - [=] - all are captured by value
+    - [&] - all are captured by reference. 
+    - capture only local variables.
+    - By default, captured-by-value variables are const. Use mutable to change the values.\
+    - Lambda with no capture can be decayed and assigned to function pointers.
+    
+Functors
+    - is a class or struct that overloads the function call operator operator() so that its objects can be called like functions.
+    - lambdas are functors generated by compiler.
+    - is a object that behaves like a function.
+    - overloads operator()

@@ -1,0 +1,114 @@
+OSI Model
+1. Physical layer - transporting bits
+                    - ethernet cable, wires, wifi,repeaters, hub
+2. Datalink layer - network interface card have the MAC address 
+                - frame transmission on local network.
+                - mac(media access control) addresses, switches
+                - wifi card
+3. Network layer - end to end
+                -IP address, routers, any device with an IP address
+ARP - Address Resolution Protocol
+    -links a L3 address to a L2 address
+4.Transport layer - Service to Service
+                - Distinguish data streams
+                - Addressing Scheme - Ports
+                    - 0-65535 - TCP - favors reliability
+                    - 0-65535 - UDP - favors efficiency
+                - src and dest port are present in layer 4
+                -Servers listen for requests to pre-defined Ports
+                -Clients select random Port for each connection.
+                    - response traffic will arrive on this port.
+5.Session layer
+    - session establishments, session termination, session maintainenance.
+    - Login sessions, RPC. 
+6.Presentation layer
+    - makes data readable and secure.
+    - data representation and formatting, ensures sender and receiver understand data format.
+    - Responsibiltes - encryption,decryption,compression/decompresssion.
+    - SSL/TLS, JPEG, MP3 encoding, ASCII, UTF-8.
+7.Application layer
+    -Distinction between these layer is somewhat vague
+    - Other networking models combine these into one layer
+    - Layer 1 to Layer 4 are most important to understand the data flow.
+
+
+TCP/IP Model
+    - data is transmitted over internet using 4 layers
+1.Network Access - Physical and Datalink (lower layer)
+    - Actual physical transmission.
+    - Responsibiltes - Framing, MAC addressing, error detection, physical signaling, 
+2.Internet - Network
+    - logical addressing and routing
+    - move packets across networks.
+    - Responsibiltes  - packet routing, IP addressing, error reporting, fragmentation.
+    - Protocols - IP (IPv4/IPv6 packet delivery), ICMP (error and diagnostic), ARP( IP -> mac mapping), IPsec (secure IP)
+
+3.Transport - Host to Host
+    - end to end communication.
+    - uses port numbers.
+    - Responsibiltes
+        - reliability,flow control, congestion control, multiplexing.
+    - Protocols
+        - TCP (Transmission control protocol)
+            - connnection oriented, reliable, ordered.
+            - 3 way handshake,retransmission
+            - used by HTTP/HTTPS, FTP, SMTP.
+        - UDP (User datagram protocol)
+            - Fast, connectionless, no reliability.
+            - used by DNS, VoIP, streaming, online games.
+
+4.Application - combines OSI layers Session,Presentation,Application (upper layer)
+    - provide network service to user applications.
+    - Responsibiltes - encryption using TLS, data formatting, Authentication.
+    - Protocols - HTTP/HTTPS (web communication), FTP/STP (file transfer), SMTP ( send mail), POP3/IMAP (receive mail), DNS (domain->IP), DHCP(IP assignment),
+                SNMP(network monitoring), SSH (secure remote login).
+
+
+Subnet mask
+- identifies the size of the IP network.
+
+switches
+- process of moving data within networks.
+- uses layer2 header which is mac address.
+- switches use and maintain MAC address table
+- mapping of switch ports to mach addresses
+- switches perform 3 actions
+    - Learn - update mac addresss table with mapping of switch port to source MAC
+    - Flood - duplicate and send frame out all switch ports
+    - Forward - use MAC address table to deliver frame to appropiate switch port.
+- unicast frame - destination MAC is another Host
+- broadcast frame - destination MAC address of FFFF.FFFF.FFFF
+
+
+VLANs - Virtual Local Area Network
+    - divides switch ports into isolated groups.
+    - divides switches into multiple "mini-switches"
+    - switches do all three actions within each VLAN.
+
+    
+Subnet 
+ - logical division of an IP network that breaks a large network into smallar, manageable network.
+ - An IP address has two parts 
+    - (192.168.1.10) 
+   - network part - identifies the subnet (192.168.1.0) 
+   - host part - identifies the device (0.0.0.10) 
+
+ - subnet mask defines which bits belong to the network and which bits belong the host.
+
+
+
+DHCP Protocol
+    - assigns automatically IP configuration to the devices when they join the network.
+    - instead of manually configuring IP address, gateway, subnet mask, DNS.
+    - no IP conflicts
+    - it uses UDP
+    - server port: 67 , client port: 68
+    - it works on DORA process.
+    - Networks use DHCP for clients and Static IPs for servers and critical infrastructure.
+    
+    DORA
+        1.Discover - clients asks for an IP.
+        2.Offer - DHCP provides an IP.
+        3.Request - client request an IP by saying I want this IP.
+        4.Acknowledge - server replies. IP assigned successfully.
+

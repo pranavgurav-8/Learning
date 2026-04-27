@@ -1,0 +1,32 @@
+.btn {
+    width: 80px;
+    height: 80px;
+    border: 50px;
+    border-radius: 20px;
+    color: #fff;
+    margin: 10px;
+    cursor: pointer;
+    border: 4px solid #000;
+}
+
+.bg-red {
+    background-color: red;
+}
+.bg-green {
+    background-color: green;
+}       
+.bg-blue {
+    background-color: blue;
+}
+
+.btn:hover {
+    border: 1px solid #fff;
+}
+
+.count{
+    width: 100px;
+    padding: 10px;
+    background: gray;
+    margin: auto;
+    margin-bottom: 30px;
+}

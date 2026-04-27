@@ -1,0 +1,8 @@
+<!-- <h1 style="background-color: red;">Dynamic Styling Example</h1> -->
+ <h1 
+ [style.backgroundColor]="bgcolor"
+ [style.fontSize.pt]="fontSize"
+ >Dynamic Styling Example</h1>
+
+ <h1 [style.fontSize]="bigTheme ? headingSizeBig:headingSizeSmall">Heading </h1>
+ <button (click)="updateHeadingSize()">Toggle</button>

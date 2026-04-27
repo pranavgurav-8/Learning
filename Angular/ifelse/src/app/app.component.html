@@ -1,0 +1,90 @@
+<!-- <h1>If and Else</h1>
+@if(display){
+
+  <div style="width: 200px; height: 200px;background-color: red;"></div>  
+}
+<div style="width: 200px; height: 200px;background-color: green;"></div> -->
+
+
+<h1>Else If</h1>
+<button (click)="color = 1">Red</button>
+<button (click)="color = 2">Blue</button>   
+<button (click)="color = 3">Yellow</button>
+<button (click)="color = 4">Other</button>
+<!-- @if(color == 1){
+  <div style="background-color: red; width: 100px; height: 100px;"></div>
+}
+@else if(color == 2){
+  <div style="background-color: blue; width: 100px; height: 100px;"></div>
+}
+<div style="background-color: blue; width: 100px; height: 100px;"></div> -->
+<!-- @else if(color == 3){
+  <div style="background-color: yellow; width: 100px; height: 100px;"></div>
+}
+@else {
+  <div style="background-color: black; width: 100px; height: 100px;"></div>
+} -->
+@switch(color){
+  @case(1){
+    <div style="background-color: red; width: 100px; height: 100px;"></div>
+  }
+  @case(2){
+    <div style="background-color: blue; width: 100px; height: 100px;"></div>
+  }
+  @case(3){
+    <div style="background-color: yellow; width: 100px; height: 100px;"></div>
+  }
+  @default{
+    <div style="background-color: black; width: 100px; height: 100px;"></div>
+  }
+}
+
+@for(user of users; track user){
+  <p>{{user}}</p>
+}
+<hr>
+@for(student of students; track student){
+  <div>
+    <span>{{student.name}}</span>
+    <span>{{student.age}}</span>
+    <button (click)="getName(student.name)">GetName</button>
+  </div>
+}
+
+<br>
+<h1>{{x}}</h1>
+<h1>{{count()}}</h1>
+
+<button (click)="updateCount()">UpdateCount</button>
+
+<hr>
+<h1>Writeable count {{data()}}</h1>
+<h1>Computed count {{computedCount()}}</h1>
+
+<button (click)="updateData()">UpdateData</button>
+<hr>
+<h1>Computed signal </h1>
+<button (click)="showValue()">Show Value</button>
+
+<hr>
+<h1>Two way binding</h1>
+<!-- <input [(ngModel)]="name" type="text" placeholder="enter name">
+
+<h1>{{name}}</h1> -->
+
+<input type = "text" (input)="changeName($event)" placeholder="Enter name">
+<h1>{{name}}</h1>
+
+<hr>
+<h1>{{userName()}}</h1>
+<button (click)="userName.set('sam')">Update User Name</button>
+
+<hr>
+<h1>For loop contextual variables</h1>
+@for(user of users; track user; let i=$index){
+  @if($first || $last){
+    <h3 style="background-color: red;">This is {{i+1}} and his name is {{user}}</h3>
+  }@else{
+    <h3>This is {{i}} and his name is {{user}}</h3>
+  }
+}

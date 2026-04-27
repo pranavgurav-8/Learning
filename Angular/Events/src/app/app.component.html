@@ -1,0 +1,20 @@
+<h1>Events in Angular</h1>
+<button class="btn" name="login" (click)="handleEvents($event)">Click me</button>
+
+<br>
+<br>
+<div
+(mouseenter)="handleEvents($event)"
+style="background-color: red; width: 100px; height: 100px;">
+</div>
+<div
+(mouseleave)="handleEvents($event)"
+style="background-color: green; width: 100px; height: 100px;">
+</div>
+<br>
+<br>
+<input type="text" 
+(focus)="handleEvents($event)"
+(focusout)="handleEvents($event)"
+(blur)="handleEvents($event)"
+(input)="handleEvents($event)" name="user"/>
